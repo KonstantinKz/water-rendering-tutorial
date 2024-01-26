@@ -1,25 +1,25 @@
 ---
-title: "Ocean Rendering"
-preview_title: "Tutorial/Article"
+title: "🌊 Ocean rendering"
+description: "In-depth tutorial on how to render water in games"
 permalink: /
 layout: default
 ---
-
-# Rendering water in games. In-depth tutorial on how to render water in games:
+# **Rendering water in games**
+---
 
 In the fast-paced world of game development, technology keeps pushing boundaries every day. Developers strive to immerse players in experiences with cutting-edge technology - each generation, we see advances in graphics, AI, virtual and augmented reality, physics simulation, networking, and many more. Personally, I'm fascinated by the progress in computer graphics, especially in recent years. However, one aspect of this technological advancement has sparked my interest – water rendering and why in some recent games it is not as great as one would expect. 
 
 Here are a few examples of recent games featuring water rendering:
 
-![](media/cyberpunk2077.png)
-###### Cyberpunk 2077 (Path-tracing on, highest graphical settings, DLSS3.0 on with 85% sharpness)
+![](media/cyberpunk2077.png) *Cyberpunk 2077 (Path-tracing on, highest graphical settings, DLSS3.0 on with 85% sharpness)*
 
-![](media/pokemon.jpeg)
-###### [Pokemon Legends Arceus Water at a distance (by user rambucide, Imgur)](https://imgur.com/gallery/PXh2PNU)
+![](media/pokemon.jpeg) *[Pokemon Legends Arceus Water at a distance (by user rambucide, Imgur)](https://imgur.com/gallery/PXh2PNU)*
 
 I would say the water in these examples are somewhat unconvincing and shallow.
 
-## Can we do better? Let's explore: 
+
+# **Can we do better? Let's explore:**
+---
 There are different techniques when it comes to simulating water in games and graphic applications:
 
 1. **Generating waves based on fluid dynamics**. Produces realistic-looking results with an actual displacement of the geometry requires a lot of computational power. Could benefit from using Fast Fourier Transforms (FFTs) to produce even more realistic-looking results, albeit implementing the FFT algorithm is quite complex.
@@ -33,14 +33,15 @@ To avoid feeling overwhelmed by the options, let's explore one aspect of water r
 
 Before diving deeper into how we can do this, let's find a good example of ocean simulation in games - "Sea of Thieves":
 
-![](media/seaOfThieves.gif)
-###### ["Sea of Thieves Has Some Gorgeous Water Shots" - IGN](https://www.youtube.com/watch?v=aGogFt4bhTM)
+![](media/seaOfThieves.gif) 
+*["Sea of Thieves Has Some Gorgeous Water Shots" - IGN](https://www.youtube.com/watch?v=aGogFt4bhTM)*
 
 This is what we will be striving towards.
 
 From the [SIGGRAPH](https://www.youtube.com/watch?v=y9BOz2dFZzs&ab_channel=iamarugin) talk with technical artists from Rare, we can learn that Sea of Thieves uses FFT algorithm based on a [2001 paper form Jerry Tessendorf called "Simulating Ocean Water"](https://people.computing.clemson.edu/~jtessen/reports/papers_files/coursenotes2004.pdf). The paper suggests that the FFT algorithm is challenging to implement due to its mathematical complexity. Therefore for the sake of this blogpost, we will begin without implementing fast Fourier transforms. Essentially, FFT allows us to sample more waves for finer details of the water surface, therefore to understand the basics we will use simpler algorithms and possibly build on those as we proceed.
 
-## Simulating waves
+# **Simulating waves**
+---
 
 To render a water surface, let's consider it as a plane composed of many vertices. Therefore to visualize waves, we would need to displace the vertices of that plane according to some pattern. Nvidia in the first chapter of their book [GPU Gems](https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-1-effective-water-simulation-physical-models), suggest one simple solution for rendering the surface of the water - the sum of sines. This approach calculates a scalar value with a set of sine waves as input, with which we can easily displace the surface points of a plane. One sine wave wouldn't create the desired effect, but if we calculate the sum of many sine waves with different parameters, we essentially get a white noise. 
 
@@ -123,8 +124,7 @@ However, a sine wave can only displace vertices along the Y-axis of each surface
 
 Each surface point on a water surface moves in a circle, orbiting a fixed anchor point. As the crest of a wave approaches, the point moves towards it. After the crest passes, it slides back. The result is that water bunches up in crests and spreads out in troughs, and the same will happen to our vertices. This particular movement can be simulated with the Gerstner wave.
 
-![](media/gerstner.png)
-###### Gerstner wave
+![](media/gerstner.png) *Gerstner wave*
 
 To switch to the Gerstner wave, we need to change the function that calculates displacement (note that the function now gives an output in 2D):
 
@@ -152,7 +152,8 @@ With an input of 16 procedurally generated waves, this is the result:
 
 Now, for the best output, you can experiment with different wave parameters.
 
-## Tessellation
+# **Tessellation**
+---
 
 Drawing a large number of triangles for the surface of the water comes at a computational cost, so let's optimize. When rendering a generated mesh (such as a plane or terrain with a height map), we can use tessellation to dynamically increase the level of detail closer to the camera. The implementation of this will be platform-dependent but I am leaving a few examples for the DX12 and OpenGL.
 
@@ -165,7 +166,8 @@ Essentially, tessellation involves dividing triangles (or patches) into smaller 
 [OpenGL tutorial by Victor Gordan](https://www.youtube.com/watch?v=21gfE-zUym8&ab_channel=VictorGordan)
 
 
-## Pixel shader
+# **Pixel shader**
+--- 
 
 Now that we have established the logic for displacing a vertex on a plane to create a somewhat believable ocean simulation, our next step is to shade it to resemble water.
 
@@ -255,4 +257,7 @@ I hope this tutorial/article has been helpful to someone interested in this fiel
 
 This project is a part of my learning experience as a second-year student at Breda University of Applied Sciences. 
 
-![](media/BUasLogo.png)
+<div class="crop">
+   <img src="media/BUasLogo.png">
+</div>
+

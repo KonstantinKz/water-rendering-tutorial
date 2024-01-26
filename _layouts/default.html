@@ -7,16 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#FFA500">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="{{ '/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
     {% include head-custom.html %}
   </head>
   <body>
     
     <header class="page-header" role="banner">
-      <h1 style="color: white;" class="project-name">{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
-      <h2 style="color: white;">
-        <a class="author" href="mailto: {{ site.student.number }}.buas.nl">{{ site.student.name }}</a>
-      </h2>
+      <span style ="padding: 0%; margin-bottom: 0%; margin-top: 0%;">
+      <h1 style="padding: 0%; margin-bottom: 0%; margin-top: 0%; color: white;" class="project-name">{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
+      <h2 style="padding: 0%; margin-bottom: 0%; margin-top: 1%; color: white;" class="description">{{ page.description }}</h2>
+      <h2 style="padding: 0%; margin-bottom: 0%; margin-top: 1%; color: white;" class="author">{{ site.student.name }}</h2>
+      </span>
     </header>
 
     <main id="content" class="main-content" role="main">
