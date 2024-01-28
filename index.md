@@ -3,6 +3,8 @@ title: "🌊 Ocean rendering"
 description: "In-depth tutorial on how to render water in games"
 permalink: /
 layout: default
+markdown: kramdown
+
 ---
 # **Rendering water in games**
 ---
@@ -15,7 +17,7 @@ Here are a few examples of recent games featuring water rendering:
 
 ![](media/pokemon.jpeg) *[Pokemon Legends Arceus Water at a distance (by user rambucide, Imgur)](https://imgur.com/gallery/PXh2PNU)*
 
-I would say the water in these examples are somewhat unconvincing and shallow.
+I would say the water in these examples is somewhat unconvincing and shallow.
 
 
 # **Can we do better? Let's explore:**
@@ -48,10 +50,10 @@ To render a water surface, let's consider it as a plane composed of many vertice
 
 If you recall from a math class, sine waves are oscillators making them relatively easy to describe with different parameters to alternate them. Let's look at a sine formula that we will be using:
 
-$f(xy,t) = \alpha * sin(xy * d * \omega + t * \phi)$
+$$f(xy,t) = \alpha * sin(xy * d * \omega + t * \phi)$$
 
 
-As we can see the vertex shader (where we will calculate a displacement) only requires a few parameters: amplitude ($\alpha$), frequency ($\omega$), phase ($\phi$) and direction ($d$) of each wave we need to sample. Additionally, we need the total number of sampled sine waves per vertex and time to modulate the waves.
+As we can see the vertex shader (where we will calculate a displacement) only requires a few parameters: amplitude  \\((\alpha)\\), frequency \\((\omega)\\), phase \\((\phi)\\) and direction  \\((d)\\) of each wave we need to sample. Additionally, we need the total number of sampled sine waves per vertex and time to modulate the waves.
 
 
 In my case, the wave parameters are generated procedurally on the CPU and then passed to the GPU. Based on how you generate the parameters the output will change significantly. This is an outline of the wave structure for the buffer to be sent to the GPU:
@@ -128,7 +130,7 @@ Each surface point on a water surface moves in a circle, orbiting a fixed anchor
 
 To switch to the Gerstner wave, we need to change the function that calculates displacement (note that the function now gives an output in 2D):
 
-$P =  [\alpha * cosf,  \alpha * sinf] $
+$$P =  [\alpha * cosf,  \alpha * sinf]$$
 
 ```glsl
 vec3 Gerstner(vec3 vertexPos, Wave w) 
@@ -201,7 +203,7 @@ We are particularly interested in their approach to lighting and their rendering
 
 ![](media/equationAtlas.png)
 
-After taking a closer look, we can observe that it resembles the basic PBR equation but includes environment reflections and light scattering. For us, the most interesting of the three components is the first one ($Lscatter$) - a subsurface scattering calculation. As the name suggests this component calculates how much light scatters inside of a body after penetrating it. This effect can be seen when you shine a light through your fingers. 
+After taking a closer look, we can observe that it resembles the basic PBR equation but includes environment reflections and light scattering. For us, the most interesting of the three components is the first one \\((Lscatter)\\) - a subsurface scattering calculation. As the name suggests this component calculates how much light scatters inside of a body after penetrating it. This effect can be seen when you shine a light through your fingers. 
 
 
 ![](media/scattering.png)
@@ -216,7 +218,7 @@ Without this effect, our water will look unnatural, like plastic or metal. Altho
 - The third term (k3) is Lambert's cosine law.
 - The last term (k4) is an ambient light value.
 
-Each term is then multipled with a scatter color ($Css$) the sun irradiance color ($Lsun$) and ambient color ($Cf$) defined by artists.
+Each term is then multipled with a scatter color \\((Css)\\) the sun irradiance color \\((Lsun)\\) and ambient color \\((Cf)\\) defined by artists.
 
 For more detailed formulas on specular and environmental reflection, refer to the original talk or the [pdf](https://gpuopen.com/gdc-presentations/2019/gdc-2019-agtd6-interactive-water-simulation-in-atlas.pdf) of the presentation. 
 
@@ -235,10 +237,10 @@ However, there are still several aspects we could improve on:
 6. Adding objects (boats) floating on the surface of the ocean.
 
 
-In conclusion, we can see why, the examples of water rendering at the beginning of this blog post are not impresive for the players. Water simulations are computationaly expensive and quite complex to implement.
+In conclusion, we can see why, the examples of water rendering at the beginning of this blog post are not impressive for the players. Water simulations are computationally expensive and quite complex to implement.
 It's clear why only games with a specific focus on water invest the resources to create more detailed and visually impressive water simulations.
 
-However, water simulation can be an intriguing and rewarding topic for graphics programmers and tech-artists to explore, as it requires an integration of complex techniques into a cohesive system. As computational power continues to grow, we can expect even more impressive advancements in water rendering.
+However, water simulation can be an intriguing and rewarding topic for graphics programmers and tech artists to explore, as it requires an integration of complex techniques into a cohesive system. As computational power continues to grow, we can expect even more impressive advancements in water rendering.
 
 I hope this tutorial/article has been helpful to someone interested in this field. I've compiled a list of resources that I found valuable during my research:
 
